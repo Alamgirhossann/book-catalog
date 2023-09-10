@@ -7,7 +7,6 @@ export type IBookCatalog = {
   genre: string;
   publicationYear: string;
   creator: any;
-  finish: boolean;
   reviews?: string[];
 };
 

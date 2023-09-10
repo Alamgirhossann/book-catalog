@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import { IBookCatalog } from "./bookCatalog.interface";
 
-const bookCatalogSchema = new Schema<IBookCatalog>(
+export const bookCatalogSchema = new Schema<IBookCatalog>(
   {
     title: {
       type: String,
@@ -23,10 +23,16 @@ const bookCatalogSchema = new Schema<IBookCatalog>(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    reviews: {
-      type: Array,
-      required: false,
+    finish: {
+      type: Boolean,
+      default: false,
     },
+    reviews: [
+      {
+        type: String,
+        required: false,
+      },
+    ],
   },
   {
     timestamps: true,

@@ -7,7 +7,7 @@ import httpStatus from "http-status";
 import { IPaginationOptions } from "../../../interfaces/pagination";
 import { IGenericResponse } from "../../../interfaces/error";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
-import { SortOrder } from "mongoose";
+import { SortOrder, Types } from "mongoose";
 import { bookCatalogSearchableFields } from "./bookCatalog.constant";
 
 const createBookCatalog = async (
@@ -15,7 +15,7 @@ const createBookCatalog = async (
   payload: IBookCatalog
 ): Promise<IBookCatalog> => {
   let createdCow;
-  if (user?.userId) {
+  if (payload) {
     const isUser = await User.findOne({ email: user?.userId });
     payload.creator = isUser?._id;
     createdCow = (await BookCatalog.create(payload)).populate("creator");
@@ -28,6 +28,19 @@ const createBookCatalog = async (
   return createdCow;
 };
 
+const createWishList = async (payload: IBookCatalog): Promise<IBookCatalog> => {
+  let createdWishList;
+  if (payload) {
+    createdWishList = await BookCatalog.create(payload);
+  } else {
+    throw new ApiError(httpStatus.NOT_FOUND, "No data sent");
+  }
+  if (!createWishList) {
+    throw new ApiError(400, "Faild to create wish list");
+  }
+  return createdWishList;
+};
+
 const getAllBookCatalog = async (
   filters: IBookCatalogFilters,
   paginationOptions: IPaginationOptions,
@@ -36,7 +49,7 @@ const getAllBookCatalog = async (
   const isUser = await User.findOne({ email: user?.userId });
   console.log(isUser);
   const { searchTerm, ...filtersData } = filters;
-  const { page, limit, skip, sortBy, sortOrder } =
+  const { sortBy, sortOrder } =
     paginationHelpers.calculatePagination(paginationOptions);
 
   const andConditions = [];
@@ -68,22 +81,21 @@ const getAllBookCatalog = async (
   const whereConditions =
     andConditions.length > 0 ? { $and: andConditions } : {};
 
-  const result = await BookCatalog.find(whereConditions)
-    .sort(sortConditions)
-    .skip(skip)
-    .limit(limit);
+  const result = await BookCatalog.find(whereConditions).sort(sortConditions);
+  // .skip(skip)
+  // .limit(limit);
 
-  console.log(result.filter((i) => i.genre));
+  const filterData = result.filter((i) => i.creator == isUser?.id);
 
   const total = await BookCatalog.countDocuments();
 
   return {
     meta: {
-      page,
-      limit,
+      // page,
+      // limit,
       total,
     },
-    data: result,
+    data: filterData,
   };
 };
 
@@ -118,4 +130,5 @@ export const BookCatalogService = {
   getSingleBookCatalog,
   updateBookCatalog,
   deleteBookCatalog,
+  createWishList,
 };

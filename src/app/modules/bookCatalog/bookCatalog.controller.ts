@@ -10,7 +10,7 @@ import { bookCatalogFilterableFields } from "./bookCatalog.constant";
 
 const createBookCatalog = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
-  console.log(user);
+  // console.log(user);
   const { ...bookCatalogData } = req.body;
   const result = await BookCatalogService.createBookCatalog(
     user,
@@ -24,6 +24,19 @@ const createBookCatalog = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
+const createWishList = catchAsync(async (req: Request, res: Response) => {
+  const { ...wishListData } = req.body;
+  const result = await BookCatalogService.createWishList(wishListData);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Wish list Created Successfully",
+    data: result,
+  });
+});
+
 const getAllBookCatalog = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
   // console.log(user);
@@ -85,4 +98,5 @@ export const BookCatalogController = {
   getSingleBookCatalog,
   updateBookCatalog,
   deleteBookCatalog,
+  createWishList,
 };

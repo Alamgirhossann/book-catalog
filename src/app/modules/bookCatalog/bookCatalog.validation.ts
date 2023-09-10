@@ -13,6 +13,7 @@ const createBookCatalogZodSchema = z.object({
     publicationYear: z.string({
       required_error: "publicationYear is required",
     }),
+    finish: z.boolean().optional(),
     reviews: z.array(z.string()).optional(),
   }),
 });
@@ -23,6 +24,7 @@ const updateBookCatalogZodSchema = z.object({
     author: z.string().optional(),
     genre: z.string().optional(),
     publicationYear: z.string().optional(),
+    finish: z.boolean().optional(),
     reviews: z.array(z.string()).optional(),
   }),
 });
