@@ -1,17 +1,22 @@
 import ApiError from "../../../errors/ApiError";
 import httpStatus from "http-status";
-import { IBookCatalog } from "../bookCatalog/bookCatalog.interface";
 import { WishList } from "./wishList.model";
+import { IWishListBookCatalog } from "./wishList.interface";
 
-const createWishList = async (payload: IBookCatalog): Promise<IBookCatalog> => {
+const createWishList = async (
+  payload: IWishListBookCatalog
+): Promise<IWishListBookCatalog> => {
+  const isExist = await WishList.findOne({ _id: payload._id });
+  console.log(payload._id);
+  console.log(isExist);
   let createdWishList;
-  if (payload) {
+  if (!isExist) {
     createdWishList = await WishList.create(payload);
   } else {
-    throw new ApiError(httpStatus.NOT_FOUND, "No data sent");
-  }
-  if (!createWishList) {
-    throw new ApiError(400, "Faild to create wish list");
+    throw new ApiError(
+      httpStatus.NOT_FOUND,
+      "Book is already exist on wish list"
+    );
   }
   return createdWishList;
 };

@@ -6,6 +6,7 @@ import { WishListService } from "./wishList.service";
 
 const createWishList = catchAsync(async (req: Request, res: Response) => {
   const { ...wishListData } = req.body;
+  // console.log(wishListData);
   const result = await WishListService.createWishList(wishListData);
 
   sendResponse(res, {

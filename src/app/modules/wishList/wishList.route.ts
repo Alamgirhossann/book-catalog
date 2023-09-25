@@ -12,11 +12,4 @@ router.post(
   WishListController.createWishList
 );
 
-// router.post(
-//   "/create-currentlyReading",
-//   auth(),
-//   // validateRequest(BookCatalogValidation.createBookCatalogZodSchema),
-//   WishListController
-// );
-
 export const WishListRoutes = router;

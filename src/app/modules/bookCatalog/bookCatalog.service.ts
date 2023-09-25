@@ -28,19 +28,6 @@ const createBookCatalog = async (
   return createdCow;
 };
 
-const createWishList = async (payload: IBookCatalog): Promise<IBookCatalog> => {
-  let createdWishList;
-  if (payload) {
-    createdWishList = await BookCatalog.create(payload);
-  } else {
-    throw new ApiError(httpStatus.NOT_FOUND, "No data sent");
-  }
-  if (!createWishList) {
-    throw new ApiError(400, "Faild to create wish list");
-  }
-  return createdWishList;
-};
-
 const getAllBookCatalog = async (
   filters: IBookCatalogFilters,
   paginationOptions: IPaginationOptions,
@@ -130,5 +117,4 @@ export const BookCatalogService = {
   getSingleBookCatalog,
   updateBookCatalog,
   deleteBookCatalog,
-  createWishList,
 };

@@ -1,7 +1,8 @@
 import { Types } from "mongoose";
 import { IUser } from "../user/user.interface";
 
-export type IBookCatalog = {
+export type ICurrentReadingListBookCatalog = {
+  _id?: string | undefined;
   title: string;
   author: string;
   genre: string;
